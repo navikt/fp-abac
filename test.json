@@ -1,0 +1,19 @@
+{
+  request=Request{
+
+  action=AttributeSet{
+  attribute={
+  Pair{
+  attributeId=
+  'urn:oasis:names:tc:xacml:1.0:action:action-id',
+  value=read
+}}},
+environment=AttributeSet{attribute={
+Pair{attributeId='no.nav.abac.attributter.environment.felles.pep_id', value=fpinfo},
+Pair{attributeId='no.nav.abac.attributter.environment.felles.tokenx_token_body',
+value=eyJhdF9oYXNoIjoibTQ3QWx3b0FSRzkzV2xJcFVGSmM1USIsInN1YiI6IjEwMDk2MTIzMTU0IiwidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6XC9cL3Rva2VuZGluZ3MuZGV2LWdjcC5uYWlzLmlvIiwibm9uY2UiOiJNVlZWTmZNUG1HNVI0SlRPRkFnZHZ2a1Zra3dsc0dva2ZVM28xUEh1UHlJIiwiY2xpZW50X2lkIjoiZGV2LWZzczp0ZWFtZm9yZWxkcmVwZW5nZXI6ZnBzb2tuYWQtbW90dGFrIiwiYXVkIjoiZGV2LWZzczp0ZWFtZm9yZWxkcmVwZW5nZXI6ZnBpbmZvIiwiYWNyIjoiTGV2ZWw0IiwibmJmIjoxNjE5MTAyMTEzLCJpZHAiOiJodHRwczpcL1wvbmF2dGVzdGIyYy5iMmNsb2dpbi5jb21cL2QzOGYyNWFhLWVhYjgtNGM1MC05ZjI4LWViZjkyYzEyNTZmMlwvdjIuMFwvIiwiYXV0aF90aW1lIjoxNjE5MTAyMTEwLCJleHAiOjE2MTkxMDI0MTMsImlhdCI6MTYxOTEwMjExMywianRpIjoiYmEyZWRiMWUtYzU0NC00MWEwLTljZTctODk1Njk5ODRiZmE3In0}}},
+resource={AttributeSet{attribute={
+Pair{attributeId='no.nav.abac.attributter.resource.felles.domene', value=foreldrepenger},
+Pair{attributeId='no.nav.abac.attributter.resource.felles.resource_type', value=no.nav.abac.attributter.foreldrepenger.fagsak},
+Pair{attributeId='no.nav.abac.attributter.resource.felles.person.aktoerId_resource', value=2424025146052}}}},
+accessSubject=null}}
