@@ -79,7 +79,7 @@ public class NyXacmlRequestMapper {
         var attributes = new ArrayList<XacmlRequest.Pair>();
 
         attributes.add(new XacmlRequest.Pair(AbacAttributtNøkkel.RESOURCE_DOMENE, pdpRequest.getDomene().orElse(DEFAULT_DOMENE_FORELDREPENGER)));
-        attributes.add(new XacmlRequest.Pair(AbacAttributtNøkkel.RESOURCE_RESOURCE_TYPE, pdpRequest.ResourceType()));
+        attributes.add(new XacmlRequest.Pair(AbacAttributtNøkkel.RESOURCE_RESOURCE_TYPE, pdpRequest.getResource()));
 
         pdpRequest.getFagsakStatus().ifPresent(s -> attributes.add(new XacmlRequest.Pair(AbacAttributtNøkkel.RESOURCE_FORELDREPENGER_SAK_SAKSSTATUS, s.getEksternKode())));
         pdpRequest.getBehandlingStatus().ifPresent(s -> attributes.add(new XacmlRequest.Pair(AbacAttributtNøkkel.RESOURCE_FORELDREPENGER_SAK_BEHANDLINGSSTATUS, s.getEksternKode())));
@@ -100,7 +100,7 @@ public class NyXacmlRequestMapper {
     }
 
     private static XacmlRequest.Pair ActionInfo(final PdpRequest pdpRequest) {
-        return new XacmlRequest.Pair(AbacAttributtNøkkel.ACTION_ACTION_ID, pdpRequest.ActionId().getEksternKode());
+        return new XacmlRequest.Pair(AbacAttributtNøkkel.ACTION_ACTION_ID, pdpRequest.getActionType().getEksternKode());
     }
 
     private static XacmlRequest.Pair getPepIdInfo(final PdpRequest pdpRequest) {

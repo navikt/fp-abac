@@ -63,7 +63,7 @@ public class AbacAuditlogger {
     private void logg(PdpRequest pdpRequest, BeskyttRessursAttributer attributter, Access access) {
         requireNonNull(pdpRequest);
 
-        String abacAction = requireNonNull(pdpRequest.ActionId().getEksternKode());
+        String abacAction = requireNonNull(pdpRequest.getActionType().getEksternKode());
         var header = createHeader(abacAction, access);
         var fields = createDefaultAbacFields(pdpRequest, attributter);
 
@@ -91,14 +91,14 @@ public class AbacAuditlogger {
     }
 
     private Set<CefField> createDefaultAbacFields(PdpRequest pdpRequest, BeskyttRessursAttributer attributter) {
-        String abacAction = requireNonNull(pdpRequest.ActionId().getEksternKode());
-        String abacResourceType = requireNonNull(pdpRequest.ResourceType());
+        String abacAction = requireNonNull(pdpRequest.getActionType().getEksternKode());
+        String abacResourceType = requireNonNull(pdpRequest.getResource());
 
         Set<CefField> fields = new HashSet<>();
         fields.add(new CefField(EVENT_TIME, System.currentTimeMillis()));
         fields.add(new CefField(ABAC_RESOURCE_TYPE, abacResourceType));
         fields.add(new CefField(ABAC_ACTION, abacAction));
-        fields.add(new CefField(REQUEST, pdpRequest.Request()));
+        fields.add(new CefField(REQUEST, pdpRequest.getRequest()));
 
         if (pdpRequest.getUserId() != null) {
             fields.add(new CefField(USER_ID, pdpRequest.getUserId()));

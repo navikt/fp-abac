@@ -93,8 +93,8 @@ class PepImplTest {
     private PdpRequest buildPdpRequest(BeskyttRessursAttributer attributter, String userId) {
         return PdpRequest.builder()
             .medDomene("testDomene")
-            .medActionType(attributter.ActionType())
-            .medResourceType(attributter.Resource())
+            .medActionType(attributter.getActionType())
+            .medResourceType(attributter.getResource())
             .medRequest(attributter.getRequestPath())
             .medUserId(userId)
             .medIdToken(IdToken.withToken("testTokenString", TokenType.OIDC))
