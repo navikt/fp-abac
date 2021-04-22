@@ -60,15 +60,15 @@ public class PdpRequest {
         return idToken;
     }
 
-    public ActionType ActionId() {
+    public ActionType getActionType() {
         return actionId;
     }
 
-    public String ResourceType() {
+    public String getResource() {
         return resourceType;
     }
 
-    public String Request() {
+    public String getRequest() {
         return request;
     }
 

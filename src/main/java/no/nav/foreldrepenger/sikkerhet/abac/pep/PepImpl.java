@@ -64,7 +64,7 @@ public class PepImpl implements Pep {
     @Override
     public Tilgangsbeslutning vurderTilgang(BeskyttRessursAttributer ressursAttributer) {
         var pdpRequest = builder.lagPdpRequest(ressursAttributer);
-        if (PIP.equals(ressursAttributer.Resource())) {
+        if (PIP.equals(ressursAttributer.getResource())) {
             return vurderTilgangTilPipTjenesten(pdpRequest, ressursAttributer);
         }
 

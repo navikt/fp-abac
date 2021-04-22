@@ -45,7 +45,7 @@ public class BeskyttRessursAttributer {
         return this;
     }
 
-    public ActionType ActionType() {
+    public ActionType getActionType() {
         return actionType;
     }
 
@@ -63,7 +63,7 @@ public class BeskyttRessursAttributer {
         return this;
     }
 
-    public String Resource() {
+    public String getResource() {
         return resource;
     }
 

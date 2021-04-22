@@ -132,8 +132,8 @@ class BeskyttetRessursInterceptorTest {
 
     private PdpRequest lagPdpRequest(final BeskyttRessursAttributer attributter) {
         PdpRequest pdpRequest = PdpRequest.builder()
-            .medActionType(attributter.ActionType())
-            .medResourceType(attributter.Resource())
+            .medActionType(attributter.getActionType())
+            .medResourceType(attributter.getResource())
             .medIdToken(IdToken.withToken(DUMMY_ID_TOKEN, TokenType.OIDC))
             .medUserId("A000000")
             .medRequest(attributter.getRequestPath())

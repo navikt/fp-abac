@@ -40,7 +40,7 @@ public class XacmlRequestMapper {
             identer.forEach(ident -> populerResourcesSet(xacmlBuilder, pdpRequest, ident));
         }
 
-        populerActionSet(xacmlBuilder, pdpRequest.ActionId());
+        populerActionSet(xacmlBuilder, pdpRequest.getActionType());
 
         // Hack til å støtte for tokenx siden abac ikke støtter det ennå og da må subject legges inn
         var medToken = ENV.getProperty("bruk.tokenx.token", Boolean.class, true);
@@ -131,7 +131,7 @@ public class XacmlRequestMapper {
         var resourceAttributeSet = new XacmlAttributeSet();
 
         resourceAttributeSet.addAttribute(AbacAttributtNøkkel.RESOURCE_DOMENE, pdpRequest.getDomene().orElse(DEFAULT_DOMENE_FORELDREPENGER));
-        resourceAttributeSet.addAttribute(AbacAttributtNøkkel.RESOURCE_RESOURCE_TYPE, pdpRequest.ResourceType());
+        resourceAttributeSet.addAttribute(AbacAttributtNøkkel.RESOURCE_RESOURCE_TYPE, pdpRequest.getResource());
 
         pdpRequest.getFagsakStatus().ifPresent(s -> resourceAttributeSet.addAttribute(AbacAttributtNøkkel.RESOURCE_FORELDREPENGER_SAK_SAKSSTATUS, s.getEksternKode()));
         pdpRequest.getBehandlingStatus().ifPresent(s -> resourceAttributeSet.addAttribute(AbacAttributtNøkkel.RESOURCE_FORELDREPENGER_SAK_BEHANDLINGSSTATUS, s.getEksternKode()));
