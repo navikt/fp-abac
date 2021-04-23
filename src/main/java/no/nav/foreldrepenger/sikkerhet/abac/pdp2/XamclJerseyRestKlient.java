@@ -49,7 +49,7 @@ class XamclJerseyRestKlient extends AbstractJerseyRestClient implements NyXacmlC
     public XacmlResponse evaluate(final XacmlRequest request) {
         try {
             if (Environment.current().isDev()) {
-                LOG.trace("PDP request: {}", request.toString());
+                LOG.trace("PDP request: {}", request);
             }
             return target.request(MEDIA_TYPE)
                 .post(Entity.entity(request, MEDIA_TYPE))
