@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.sikkerhet.abac.pdp2.xacml;
 
 import java.util.List;
 
+
 public record XacmlRequest(Request Request) {
     public static record Request (
         AttributeSet Action,
