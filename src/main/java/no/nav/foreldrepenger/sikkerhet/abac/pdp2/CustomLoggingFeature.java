@@ -14,17 +14,25 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.FeatureContext;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.WriterInterceptor;
+import javax.ws.rs.ext.WriterInterceptorContext;
 
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.message.MessageUtils;
 
-public class CustomLoggingFeature extends LoggingFeature implements ClientRequestFilter, ClientResponseFilter {
+public class CustomLoggingFeature extends LoggingFeature implements ContainerRequestFilter, ContainerResponseFilter,
+    ClientRequestFilter, ClientResponseFilter, WriterInterceptor {
 
     private static final boolean PRINT_ENTITY = true;
     private static final int MAX_ENTITY_SIZE = 8 * 1024;
@@ -41,10 +49,6 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
     static {
         requestHeaders = new ArrayList<>();
         requestHeaders.add(AUTHORIZATION);
-    }
-
-    public CustomLoggingFeature(LoggingFeature.LoggingFeatureBuilder builder) {
-        super(builder);
     }
 
     public CustomLoggingFeature(Logger logger, Level level, Verbosity verbosity, Integer maxEntitySize) {
@@ -64,18 +68,26 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
         printRequestLine(b, "Sending client request", context.getMethod(), context.getUri());
 
         if (PRINT_ENTITY && context.hasEntity()) {
-            final OutputStream stream = new LoggingStream(context.getEntityStream());
+            final OutputStream stream = new LoggingStream(b, context.getEntityStream());
             context.setEntityStream(stream);
             context.setProperty(ENTITY_LOGGER_PROPERTY, stream);
             // not calling log(b) here - it will be called by the interceptor
-        } else {
-            log(b);
+        }
+        log(b);
+    }
+
+    @Override
+    public void aroundWriteTo(final WriterInterceptorContext writerInterceptorContext) throws IOException, WebApplicationException {
+        final LoggingStream stream = (LoggingStream) writerInterceptorContext.getProperty(ENTITY_LOGGER_PROPERTY);
+        writerInterceptorContext.proceed();
+        if (stream != null) {
+            log(stream.getStringBuilder(MessageUtils.getCharset(writerInterceptorContext.getMediaType())));
         }
     }
 
     @Override
     public void filter(final ClientRequestContext requestContext, final ClientResponseContext responseContext) throws IOException {
-        final var b = new StringBuilder();
+        final StringBuilder b = new StringBuilder();
         printResponseLine(b, "Client response received", responseContext.getStatus());
 
         if (PRINT_ENTITY && responseContext.hasEntity()) {
@@ -85,11 +97,55 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
         log(b);
     }
 
+    @Override
+    public void filter(final ContainerRequestContext context) throws IOException {
+        final StringBuilder b = new StringBuilder();
+        printHeaders(b, context.getHeaders());
+        printRequestLine(b, "Server has received a request", context.getMethod(), context.getUriInfo().getRequestUri());
+
+        if (PRINT_ENTITY && context.hasEntity()) {
+            context.setEntityStream(logInboundEntity(b, context.getEntityStream(), MessageUtils.getCharset(context.getMediaType())));
+        }
+        log(b);
+    }
+
+    @Override
+    public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) {
+        final StringBuilder b = new StringBuilder();
+        printResponseLine(b, "Server responded with a response", responseContext.getStatus());
+
+        if (PRINT_ENTITY && responseContext.hasEntity()) {
+            final OutputStream stream = new LoggingStream(b, responseContext.getEntityStream());
+            responseContext.setEntityStream(stream);
+            requestContext.setProperty(ENTITY_LOGGER_PROPERTY, stream);
+            // not calling log(b) here - it will be called by the interceptor
+            log(b);
+        } else {
+            log(b);
+        }
+    }
+
     private static class LoggingStream extends FilterOutputStream {
+        private final StringBuilder b;
         private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        LoggingStream(final OutputStream inner) {
+        LoggingStream(final StringBuilder b, final OutputStream inner) {
             super(inner);
+
+            this.b = b;
+        }
+
+        StringBuilder getStringBuilder(Charset charset) {
+            // write entity to the builder
+            final byte[] entity = byteArrayOutputStream.toByteArray();
+
+            b.append(new String(entity, 0, Math.min(entity.length, MAX_ENTITY_SIZE), charset));
+            if (entity.length > MAX_ENTITY_SIZE) {
+                b.append("...more...");
+            }
+            b.append('\n');
+
+            return b;
         }
 
         @Override
