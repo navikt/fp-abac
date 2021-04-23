@@ -41,7 +41,7 @@ class XamclJerseyRestKlient extends AbstractJerseyRestClient implements NyXacmlC
         this.endpoint = endpoint;
         target = client
             .register(HttpAuthenticationFeature.basic(brukernavn, passord))
-            .register((ApacheHttpClientBuilderConfigurator) (b) -> b.setDefaultHeaders(List.of()))
+            .register((ApacheHttpClientBuilderConfigurator) b -> b.setDefaultHeaders(List.of()))
             .target(endpoint);
     }
 
