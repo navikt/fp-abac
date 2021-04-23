@@ -64,7 +64,7 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
         printRequestLine(b, "Sending client request", context.getMethod(), context.getUri());
 
         if (PRINT_ENTITY && context.hasEntity()) {
-            final OutputStream stream = new LoggingStream(b, context.getEntityStream());
+            final OutputStream stream = new LoggingStream(context.getEntityStream());
             context.setEntityStream(stream);
             context.setProperty(ENTITY_LOGGER_PROPERTY, stream);
             // not calling log(b) here - it will be called by the interceptor
@@ -88,7 +88,7 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
     private static class LoggingStream extends FilterOutputStream {
         private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        LoggingStream(final StringBuilder b, final OutputStream inner) {
+        LoggingStream(final OutputStream inner) {
             super(inner);
         }
 
@@ -121,7 +121,7 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
 
     private void log(final StringBuilder b) {
         if (logger != null) {
-            logger.info(b.toString());
+            logger.log(Level.INFO, b.toString());
         }
     }
 
