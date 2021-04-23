@@ -29,14 +29,13 @@ class XamclJerseyRestKlient extends AbstractJerseyRestClient implements NyXacmlC
     private static final String PDP_ENDPOINT_URL_KEY = "abac.pdp.endpoint.url";
     private static final String SYSTEMBRUKER_USERNAME = "systembruker.username";
     private static final String SYSTEMBRUKER_PASSWORD = "systembruker.password"; // NOSONAR
-    private static final String MEDIA_TYPE = "application/xacml+json";
+    private static final String MEDIA_TYPE = "application/json";
 
     private final URI endpoint;
     private final WebTarget target;
 
     static {
         LogManager.getLogManager().reset();
-        SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
     }
 
@@ -52,9 +51,11 @@ class XamclJerseyRestKlient extends AbstractJerseyRestClient implements NyXacmlC
             .target(endpoint);
 
         if (Environment.current().isDev()) {
+            LOG.trace("Registrereg logger.");
             client.register(new LoggingFeature(java.util.logging.Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME),
                 Level.ALL, LoggingFeature.Verbosity.PAYLOAD_ANY, 10000));
 
+            LOG.trace("Registrereg custom logger.");
             client.register(new CustomLoggingFeature(java.util.logging.Logger.getLogger(getClass().getName()),
                 Level.ALL, LoggingFeature.Verbosity.PAYLOAD_ANY, 10000));
         }

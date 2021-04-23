@@ -30,9 +30,12 @@ import javax.ws.rs.ext.WriterInterceptorContext;
 
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.message.MessageUtils;
+import org.slf4j.LoggerFactory;
 
 public class CustomLoggingFeature extends LoggingFeature implements ContainerRequestFilter, ContainerResponseFilter,
     ClientRequestFilter, ClientResponseFilter, WriterInterceptor {
+
+    org.slf4j.Logger LOG = LoggerFactory.getLogger(CustomLoggingFeature.class);
 
     private static final boolean PRINT_ENTITY = true;
     private static final int MAX_ENTITY_SIZE = 8 * 1024;
@@ -63,6 +66,7 @@ public class CustomLoggingFeature extends LoggingFeature implements ContainerReq
 
     @Override
     public void filter(final ClientRequestContext context) {
+        LOG.trace("Filter request.");
         final var b = new StringBuilder();
         printHeaders(b, context.getStringHeaders());
         printRequestLine(b, "Sending client request", context.getMethod(), context.getUri());
@@ -74,19 +78,24 @@ public class CustomLoggingFeature extends LoggingFeature implements ContainerReq
             // not calling log(b) here - it will be called by the interceptor
         }
         log(b);
+        LOG.debug(b.toString());
     }
 
     @Override
     public void aroundWriteTo(final WriterInterceptorContext writerInterceptorContext) throws IOException, WebApplicationException {
+        LOG.trace("Log around.");
         final LoggingStream stream = (LoggingStream) writerInterceptorContext.getProperty(ENTITY_LOGGER_PROPERTY);
         writerInterceptorContext.proceed();
         if (stream != null) {
-            log(stream.getStringBuilder(MessageUtils.getCharset(writerInterceptorContext.getMediaType())));
+            var stringBuilder = stream.getStringBuilder(MessageUtils.getCharset(writerInterceptorContext.getMediaType()));
+            log(stringBuilder);
+            LOG.debug(stringBuilder.toString());
         }
     }
 
     @Override
     public void filter(final ClientRequestContext requestContext, final ClientResponseContext responseContext) throws IOException {
+        LOG.trace("Filter response.");
         final StringBuilder b = new StringBuilder();
         printResponseLine(b, "Client response received", responseContext.getStatus());
 
@@ -95,10 +104,12 @@ public class CustomLoggingFeature extends LoggingFeature implements ContainerReq
                 MessageUtils.getCharset(responseContext.getMediaType())));
         }
         log(b);
+        LOG.debug(b.toString());
     }
 
     @Override
     public void filter(final ContainerRequestContext context) throws IOException {
+        LOG.trace("Filter response.");
         final StringBuilder b = new StringBuilder();
         printHeaders(b, context.getHeaders());
         printRequestLine(b, "Server has received a request", context.getMethod(), context.getUriInfo().getRequestUri());
@@ -107,6 +118,7 @@ public class CustomLoggingFeature extends LoggingFeature implements ContainerReq
             context.setEntityStream(logInboundEntity(b, context.getEntityStream(), MessageUtils.getCharset(context.getMediaType())));
         }
         log(b);
+        LOG.debug(b.toString());
     }
 
     @Override
@@ -120,8 +132,10 @@ public class CustomLoggingFeature extends LoggingFeature implements ContainerReq
             requestContext.setProperty(ENTITY_LOGGER_PROPERTY, stream);
             // not calling log(b) here - it will be called by the interceptor
             log(b);
+            LOG.debug(b.toString());
         } else {
             log(b);
+            LOG.debug(b.toString());
         }
     }
 
