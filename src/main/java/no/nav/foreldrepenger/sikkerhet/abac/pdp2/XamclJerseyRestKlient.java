@@ -48,9 +48,8 @@ class XamclJerseyRestKlient extends AbstractJerseyRestClient implements NyXacmlC
     @Override
     public XacmlResponse evaluate(final XacmlRequest request) {
         try {
-            LOG.info("Sjekker ABAC på: {}", target.getUri());
             if (Environment.current().isDev()) {
-                LOG.info("ABAC request: {}", request.toString());
+                LOG.trace("PDP request: {}", request);
             }
             return target.request(MEDIA_TYPE)
                 .post(Entity.entity(request, MEDIA_TYPE))

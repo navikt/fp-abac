@@ -76,7 +76,7 @@ public class PepImpl implements Pep {
                 nytilgangsbeslutning = nyPdp.forespørTilgang(pdpRequest);
                 sammenlignResultat(tilgangsbeslutning, nytilgangsbeslutning);
             } catch (Exception e) {
-                LOG.info("Fikk exception fra ny pdp tjeneste.", e);
+                LOG.warn("Fikk exception fra ny pdp tjeneste.", e);
             }
         }
         return tilgangsbeslutning;
