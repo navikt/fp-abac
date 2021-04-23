@@ -52,7 +52,8 @@ class XamclJerseyRestKlient extends AbstractJerseyRestClient implements NyXacmlC
             .target(endpoint);
 
         if (Environment.current().isDev()) {
-            client.register(new LoggingFeature(java.util.logging.Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME),
+
+            client.register(new CustomLoggingFeature(java.util.logging.Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME),
                 Level.ALL, LoggingFeature.Verbosity.PAYLOAD_ANY, 10000));
         }
     }
