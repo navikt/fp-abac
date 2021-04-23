@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
+import no.nav.foreldrepenger.felles.integrasjon.rest.DefaultJsonMapper;
 import no.nav.foreldrepenger.sikkerhet.abac.domene.AbacAttributtNøkkel;
 import no.nav.foreldrepenger.sikkerhet.abac.domene.AbacResultat;
 import no.nav.foreldrepenger.sikkerhet.abac.domene.ActionType;
@@ -30,7 +31,6 @@ import no.nav.foreldrepenger.sikkerhet.abac.pdp2.xacml.Decision;
 import no.nav.foreldrepenger.sikkerhet.abac.pdp2.xacml.XacmlRequest;
 import no.nav.foreldrepenger.sikkerhet.abac.pdp2.xacml.XacmlResponse;
 import no.nav.foreldrepenger.sikkerhet.abac.pep.PdpRequest;
-import no.nav.foreldrepenger.sikkerhet.abac.util.DefaultJsonMapper;
 import no.nav.vedtak.exception.VLException;
 
 public class NyPdpImplTest {

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
-import no.nav.foreldrepenger.sikkerhet.abac.util.DefaultJsonMapper;
+import no.nav.foreldrepenger.felles.integrasjon.rest.DefaultJsonMapper;
 
 class XacmlResponseTest {
 

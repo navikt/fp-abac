@@ -12,15 +12,14 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import no.nav.foreldrepenger.felles.integrasjon.rest.DefaultJsonMapper;
 import no.nav.foreldrepenger.sikkerhet.abac.domene.AbacAttributtNøkkel;
-import no.nav.foreldrepenger.sikkerhet.abac.util.DefaultJsonMapper;
 
 public class XacmlRequestTest {
 
@@ -59,7 +58,6 @@ public class XacmlRequestTest {
 
   //      var mapper2 = new ObjectMapper();
   //      mapper2.registerModule(SER_DESER);
-
   //      String answer2 = mapper2.writeValueAsString(request);
 
         assertThat(answer).contains(AbacAttributtNøkkel.ENVIRONMENT_OIDC_TOKEN_BODY);

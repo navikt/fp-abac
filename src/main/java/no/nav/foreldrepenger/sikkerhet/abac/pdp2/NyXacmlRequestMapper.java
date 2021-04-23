@@ -37,7 +37,7 @@ public class NyXacmlRequestMapper {
         var envList = new ArrayList<>(List.of(getPepIdInfo(pdpRequest)));
         var subjectList = new ArrayList<XacmlRequest.Pair>();
 
-        var medToken = Boolean.parseBoolean(ENV.getProperty("git sta"));
+        var medToken = Boolean.parseBoolean(ENV.getProperty("bruk.tokenx.token"));
         if (medToken) {
             envList.add(getTokenInfo(pdpRequest.getIdToken()));
         } else {
