@@ -61,7 +61,7 @@ class XamclJerseyRestKlientTest extends JerseyTest {
     }
 
     @Test
-    public void givenGetHiGreeting_whenCorrectRequest_thenResponseIsOkAndContainsHi() {
+    void givenGetHiGreeting_whenCorrectRequest_thenResponseIsOkAndContainsHi() {
         var actionSet = new XacmlRequest.AttributeSet(List.of(new XacmlRequest.Pair(AbacAttributtNøkkel.ACTION_ACTION_ID, "read")));
         var envSet = new XacmlRequest.AttributeSet(
             List.of(
@@ -95,7 +95,7 @@ class XamclJerseyRestKlientTest extends JerseyTest {
     }
 
     @Override
-    public TestContainerFactory getTestContainerFactory() throws TestContainerException {
+    protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
         return new TestContainerFactory() {
             @Override
             public TestContainer create(URI baseUri, DeploymentContext deploymentContext) {
