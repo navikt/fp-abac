@@ -26,8 +26,8 @@ import org.glassfish.jersey.message.MessageUtils;
 
 public class CustomLoggingFeature extends LoggingFeature implements ClientRequestFilter, ClientResponseFilter {
 
-    private static final boolean printEntity = true;
-    private static final int maxEntitySize = 8 * 1024;
+    private static final boolean PRINT_ENTITY = true;
+    private static final int MAX_ENTITY_SIZE = 8 * 1024;
     private final Logger logger = Logger.getLogger("CustomLoggingFeature");
     private static final String ENTITY_LOGGER_PROPERTY = CustomLoggingFeature.class.getName();
     private static final String NOTIFICATION_PREFIX = "* ";
@@ -59,11 +59,11 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
 
     @Override
     public void filter(final ClientRequestContext context) {
-        final StringBuilder b = new StringBuilder();
+        final var b = new StringBuilder();
         printHeaders(b, context.getStringHeaders());
         printRequestLine(b, "Sending client request", context.getMethod(), context.getUri());
 
-        if (printEntity && context.hasEntity()) {
+        if (PRINT_ENTITY && context.hasEntity()) {
             final OutputStream stream = new LoggingStream(b, context.getEntityStream());
             context.setEntityStream(stream);
             context.setProperty(ENTITY_LOGGER_PROPERTY, stream);
@@ -75,10 +75,10 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
 
     @Override
     public void filter(final ClientRequestContext requestContext, final ClientResponseContext responseContext) throws IOException {
-        final StringBuilder b = new StringBuilder();
+        final var b = new StringBuilder();
         printResponseLine(b, "Client response received", responseContext.getStatus());
 
-        if (printEntity && responseContext.hasEntity()) {
+        if (PRINT_ENTITY && responseContext.hasEntity()) {
             responseContext.setEntityStream(logInboundEntity(b, responseContext.getEntityStream(),
                 MessageUtils.getCharset(responseContext.getMediaType())));
         }
@@ -86,20 +86,23 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
     }
 
     private static class LoggingStream extends FilterOutputStream {
-        private final StringBuilder b;
         private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         LoggingStream(final StringBuilder b, final OutputStream inner) {
             super(inner);
-
-            this.b = b;
         }
 
+        @Override
         public void write(final int i) throws IOException {
-            if (byteArrayOutputStream.size() <= maxEntitySize) {
+            if (byteArrayOutputStream.size() <= MAX_ENTITY_SIZE) {
                 byteArrayOutputStream.write(i);
             }
             out.write(i);
+        }
+
+        @Override
+        public void write(final byte[] b, final int off, final int len) throws IOException {
+            write(b);
         }
     }
 
@@ -143,11 +146,11 @@ public class CustomLoggingFeature extends LoggingFeature implements ClientReques
         if (!stream.markSupported()) {
             stream = new BufferedInputStream(stream);
         }
-        stream.mark(maxEntitySize + 1);
-        final byte[] entity = new byte[maxEntitySize + 1];
+        stream.mark(MAX_ENTITY_SIZE + 1);
+        final var entity = new byte[MAX_ENTITY_SIZE + 1];
         final int entitySize = stream.read(entity);
-        b.append(new String(entity, 0, Math.min(entitySize, maxEntitySize), charset));
-        if (entitySize > maxEntitySize) {
+        b.append(new String(entity, 0, Math.min(entitySize, MAX_ENTITY_SIZE), charset));
+        if (entitySize > MAX_ENTITY_SIZE) {
             b.append("...more...");
         }
         b.append('\n');
