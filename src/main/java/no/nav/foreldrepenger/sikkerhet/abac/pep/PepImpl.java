@@ -44,14 +44,14 @@ public class PepImpl implements Pep {
                    @Named("nyPdp") Pdp nyPdp,
                    PdpRequestBuilder pdpRequestBuilder,
                    AbacAuditlogger auditlogger,
-                   @KonfigVerdi(value = "bruk.ny.pdp", required = false, defaultVerdi = "false") boolean brukNyPdp,
+                   @KonfigVerdi(value = "bruk.ny.pdp", required = false) boolean nyPdpEnabled,
                    @KonfigVerdi(value = "pip.users", required = false) String pipUsers) {
         this.pdp = pdp;
         this.nyPdp = nyPdp;
         this.builder = pdpRequestBuilder;
         this.auditlogger = auditlogger;
         this.pipUsers = konfigurePipUsers(pipUsers);
-        this.brukNyPdp = brukNyPdp;
+        this.brukNyPdp = nyPdpEnabled;
     }
 
     protected Set<String> konfigurePipUsers(String pipUsers) {
