@@ -41,6 +41,7 @@ public class NyPdpImplTest {
 
     @BeforeEach
     public void setUp() {
+        System.setProperty("bruk.tokenx.token", "true");
         xacmlConsumerMock = mock(NyXacmlConsumer.class);
         pdpKlient = new NyPdpImpl(xacmlConsumerMock);
     }

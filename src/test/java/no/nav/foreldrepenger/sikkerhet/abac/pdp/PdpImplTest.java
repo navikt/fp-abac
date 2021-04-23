@@ -47,6 +47,7 @@ public class PdpImplTest {
 
     @BeforeEach
     public void setUp() {
+        System.setProperty("bruk.tokenx.token", "true");
         xacmlConsumerMock = mock(XacmlConsumer.class);
         pdpKlient = new PdpImpl(xacmlConsumerMock);
     }
