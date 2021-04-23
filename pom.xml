@@ -26,6 +26,7 @@
         <sonar.organization>navit</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <jackson.version>2.12.3</jackson.version>
+        <felles.version>3.2.37</felles.version>
     </properties>
 
     <scm>
@@ -145,7 +146,12 @@
         <dependency>
             <groupId>no.nav.foreldrepenger.felles.integrasjon</groupId>
             <artifactId>felles-integrasjon-rest-klient</artifactId>
-            <version>3.2.35</version>
+            <version>${felles.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.foreldrepenger.felles</groupId>
+            <artifactId>felles-mapper</artifactId>
+            <version>${felles.version}</version>
         </dependency>
     </dependencies>
 

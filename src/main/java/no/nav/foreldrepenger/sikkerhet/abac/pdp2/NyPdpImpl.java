@@ -87,12 +87,12 @@ public class NyPdpImpl implements Pdp {
     }
 
     private static Advice mapToAdvice(String adviceString) {
-        switch (adviceString) {
-            case "fp3_behandle_egen_ansatt": return Advice.DENY_EGEN_ANSATT;
-            case "fp2_behandle_kode7": return Advice.DENY_KODE_7;
-            case "fp1_behandle_kode6": return Advice.DENY_KODE_6;
-            default: return null;
-        }
+        return switch (adviceString) {
+            case "fp3_behandle_egen_ansatt" -> Advice.DENY_EGEN_ANSATT;
+            case "fp2_behandle_kode7" -> Advice.DENY_KODE_7;
+            case "fp1_behandle_kode6" -> Advice.DENY_KODE_6;
+            default -> null;
+        };
     }
 
     private static Decision aggregatedDecision(List<Decision> decisions) {
