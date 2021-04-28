@@ -43,10 +43,11 @@ public class XacmlRequestMapper {
         populerActionSet(xacmlBuilder, pdpRequest.getActionType());
 
         // Hack til å støtte for tokenx siden abac ikke støtter det ennå og da må subject legges inn
-        var medToken = Boolean.parseBoolean(ENV.getProperty("bruk.tokenx.token"));
+        var medToken = ENV.getProperty("bruk.tokenx.token", Boolean.class, false);
         populerEnvironmentSet(xacmlBuilder, pdpRequest, medToken);
         if (!medToken) {
             if (pdpRequest.getIdSubject().isPresent()) {
+                LOG.info("Bruker subject.");
                 populerSubjectSet(xacmlBuilder, pdpRequest.getIdSubject().get());
             } else {
                 throw new TekniskException("ABAC-1", "Du må legge inn subjectId, subjectType og authorizationLevel om du skal bruke TokenX.");
@@ -104,6 +105,7 @@ public class XacmlRequestMapper {
         var environmentAttributes = new XacmlAttributeSet();
         environmentAttributes.addAttribute(AbacAttributtNøkkel.ENVIRONMENT_PEP_ID, pdpRequest.getPepId().orElse(getPepId()));
         if (medToken) {
+            LOG.info("Bruker token.");
             var tokenType = getTokenInfo(pdpRequest.getIdToken());
             environmentAttributes.addAttribute(tokenType.key, tokenType.value);
         }
