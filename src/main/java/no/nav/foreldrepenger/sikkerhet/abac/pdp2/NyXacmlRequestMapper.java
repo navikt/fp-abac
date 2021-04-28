@@ -37,10 +37,12 @@ public class NyXacmlRequestMapper {
         var envList = new ArrayList<>(List.of(getPepIdInfo(pdpRequest)));
         var subjectList = new ArrayList<XacmlRequest.Pair>();
 
-        var medToken = Boolean.parseBoolean(ENV.getProperty("bruk.tokenx.token"));
+        var medToken = ENV.getProperty("bruk.tokenx.token", Boolean.class, false);
         if (medToken) {
+            LOG.info("Bruker token.");
             envList.add(getTokenInfo(pdpRequest.getIdToken()));
         } else {
+            LOG.info("Bruker subject.");
             subjectList.addAll(pdpRequest.getIdSubject().map(NyXacmlRequestMapper::getSubjectInfo).orElseThrow(() ->
                 new TekniskException("ABAC-1", "Du må legge inn subjectId, subjectType og authorizationLevel om du skal bruke TokenX.")));
         }
