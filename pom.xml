@@ -16,7 +16,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit5.version>5.7.1</junit5.version>
         <mockito.version>3.9.0</mockito.version>
-        <assertj.version>3.19.0</assertj.version>
+        <assertj.version>3.21.0</assertj.version>
         <mockito.version>3.9.0</mockito.version>
 
         <additionalparam>-Xdoclint:none</additionalparam>
